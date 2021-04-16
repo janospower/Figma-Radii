@@ -7,17 +7,6 @@ figma.on("selectionchange", () => {
 		  })
 })
 
-
-function traverse(node) {
-	if ("children" in node) {
-		if (node.type !== "INSTANCE") {
-			for (const child of node.children) {
-				traverse(child)
-			}
-		}
-	}
-}
-
 figma.ui.onmessage = msg => {
 	if (msg.type === 'smooth') {
 		let nodes = figma.currentPage.selection;
@@ -29,9 +18,5 @@ figma.ui.onmessage = msg => {
 				node.cornerSmoothing = msg.value / 100;
 			}
 		});
-		
-
-		// figma.currentPage.selection = nodes;
-		// figma.viewport.scrollAndZoomIntoView(nodes);
 	}
 };

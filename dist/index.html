@@ -2673,22 +2673,13 @@
 
     smoothingCustomValue.addEventListener('keydown', (event) => {
         if ( event.key === 'Enter' ) {
+            sendSmoothing();
             smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
         }
     });
 
     smoothingApply.onclick = () => { 
-        var value = customvalueSwitch.checked ? smoothingCustomValue.value : smoothingSelectValue.value
-        value = fixValue(value);
-        if (value === '') {
-            value = 0;
-        }
-
-        parent.postMessage({ pluginMessage: { 
-            'type': 'smooth', 
-            'selection': smoothingApplyToSelection.checked,
-            'value': value
-        } }, '*');
+        sendSmoothing();
     }
 
 
@@ -2725,6 +2716,20 @@
             val = max
         }
         return val;
+    }
+
+    function sendSmoothing() {
+        var value = customvalueSwitch.checked ? smoothingCustomValue.value : smoothingSelectValue.value
+        value = fixValue(value);
+        if (value === '') {
+            value = 0;
+        }
+
+        parent.postMessage({ pluginMessage: { 
+            'type': 'smooth', 
+            'selection': smoothingApplyToSelection.checked,
+            'value': value
+        } }, '*');
     }
     </script>
     </body>
