@@ -10,10 +10,14 @@
     </head>
     <body>
 
+    <div class="tabs flex p-xxsmall">
+        <div id="tabSmoothing" class="section-title">Corner smoothing</div>
+        <div id="tabSnap" class="section-title inactive">Snap radius</div>
+    </div>
+    <hr>
+
     <div class="p-xxsmall">
-
-
-        <div class="section-title">Corner smoothing</div>
+        
         
         <div class="type mb-xxsmall">Squircles can make your designs look better. <a href="https://help.figma.com/hc/en-us/articles/360038662654" rel="noopener" target="_blank">Learn more</a></div>
 
@@ -27,8 +31,8 @@
                 <!-- Select value -->
 
                 <select id="smoothingSelectValue" class="select-menu">
-                    <option value="0.6" >iOS</option>
-                    <option value="1" >Full squircle</option>
+                    <option value="60" >iOS</option>
+                    <option value="100" >Full squircle</option>
                     <option value="0" >CSS</option>
                 </select>
             </div>
@@ -43,43 +47,18 @@
             </div>
         </div>
         
+        <div class="switch mb-medium">
+            <input class="switch__toggle" type="checkbox" id="customvalueSwitch">
+            <label class="switch__label" for="customvalueSwitch">Custom value</label>
+        </div>
+
+        
+        <button id="smoothingApply" class='button button--primary' disabled>Apply</button>  
+
         <div class="switch mb-small">
-            <input class="switch__toggle" type="checkbox" id="cornerSmoothingSwitch">
-            <label class="switch__label" for="cornerSmoothingSwitch">Custom value</label>
+            <input class="switch__toggle" type="checkbox" id="smoothingApplyToSelection">
+            <label class="switch__label" for="smoothingApplyToSelection">Apply only to current selection</label>
         </div>
-
-        
-        <div class="switch">
-            <input class="switch__toggle" type="checkbox" id="autoApply" checked>
-            <label class="switch__label" for="autoApply">Auto-apply to current selection</label>
-        </div>
-
-        <button id="apply" class='button button--primary'>Apply to all</button>
-
-
-
-        <!-- Select menu -->
-        <div class="label">Shape</div>
-        <select id="shape" class="select-menu mb-xxsmall">
-            <option value="">Please select a shape...</option>
-            <option value="square">Square</option>
-            <option value="triangle" >Triangle</option>
-            <option value="circle" >Circle</option>
-        </select>
-
-        <!-- Count input -->
-        <div class="label">Count</div>
-        <div class="input input--with-icon mb-xxsmall">
-            <div class="icon">#</div>
-            <input id="count" type="input" class="input__field" value="5">
-        </div>
-
-        <!-- Buttons -->
-        <div class="flex p-xxsmall mb-xsmall">
-            <button id="cancel" class='button button--secondary mr-xxsmall'>Cancel</button>
-            <button id="createShapes" class='button button--primary'>Create shapes</button> 
-        </div>
-        
     </div>
 
     <script src="./tmp/scripts.js"></script>

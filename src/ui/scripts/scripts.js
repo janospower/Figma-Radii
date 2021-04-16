@@ -1,11 +1,20 @@
 //vars
+const tabSmooth = document.querySelector('#tabSmooth');
+const tabSelect = document.querySelector('#tabSelect');
+
 const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
 const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
 const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
 const smoothingCustomValueContainer = document.querySelector('#smoothingCustomValueContainer');
-const cornerSmoothingSwitch = document.querySelector('#cornerSmoothingSwitch');
-const autoApply = document.querySelector('#autoApply');
-const apply = document.querySelector('#apply');
+
+const customvalueSwitch = document.querySelector('#customvalueSwitch');
+
+const smoothingApplyToSelection = document.querySelector('#smoothingApplyToSelection');
+const smoothingApply = document.querySelector('#smoothingApply');
+
+var selection = false;
+var validInput = true;
+var applicable = true;
 
 
 //on load function
@@ -15,51 +24,96 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //initialize select menu
 selectMenu.init();
+checkApply();
+
 
 //event listeners
-cornerSmoothingSwitch.onchange = () => { 
+onmessage = (event) => {
+    switch (event.data.pluginMessage.type) {
+        case 'selectionChange':
+            event.data.pluginMessage.value ? selection = true : selection = false;
+            checkApply();
+            break;
+    
+        default:
+            break;
+    }
+}
+
+customvalueSwitch.onchange = () => { 
     smoothingSelectValueContainer.classList.toggle('hidden');
     smoothingCustomValueContainer.classList.toggle('hidden');
+
+    customvalueSwitch.checked ? formValidation() : validInput = true;
+
+    checkApply();
+}
+
+smoothingApplyToSelection.onchange = () => { checkApply(); }
+
+smoothingCustomValue.oninput = () => { formValidation(); }
+
+smoothingCustomValue.addEventListener('blur', (event) => {
+    smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
+});
+
+smoothingCustomValue.addEventListener('keydown', (event) => {
+    if ( event.key === 'Enter' ) {
+        sendSmoothing();
+        smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
+    }
+});
+
+smoothingApply.onclick = () => { 
+    sendSmoothing();
 }
 
 
-
-
-
-
-// old
-const createShapesButton = document.querySelector('#createShapes');
-const cancelButton = document.querySelector('#cancel');
-const shapeMenu = document.querySelector('#shape');
-const countInput = document.querySelector('#count');
-
-//event listeners
-countInput.oninput = () => { formValidation(); }
-shapeMenu.onchange = () => { formValidation(); }
-createShapesButton.onclick = () => { createShapes(); }
-cancelButton.onclick = () => { cancel(); }
-
 //form validation
 var formValidation = function(event) {
-
-    if (shapeMenu.value === '' || countInput.value === '') {
-        createShapesButton.disabled = true;
+    if ( 0 <= smoothingCustomValue.value && smoothingCustomValue.value <= 100 ) {
+        validInput = true;
     } else {
-        createShapesButton.disabled = false;
+        validInput = false;
     }
+    checkApply();
 }
 
 
 
 //functions
-function createShapes() {
+
+function checkApply() {
+    applicable = selection && validInput || !smoothingApplyToSelection.checked && validInput
+    smoothingApply.disabled = !applicable;
+
     parent.postMessage({ pluginMessage: { 
-        'type': 'create-shapes', 
-        'count': countInput.value,
-        'shape': shapeMenu.value
+        'type': 'applicable', 
+        'value': applicable
     } }, '*');
+
 }
 
-function cancel() {
-    parent.postMessage({ pluginMessage: { 'type': 'cancel' } }, '*')
+function fixValue(val, min = 0, max = 100) {
+    if ( val < min || isNaN(val) ) {
+        val = min
+    }
+    else if ( val > max ) {
+        val = max
+    }
+    return val;
+}
+
+function sendSmoothing() {
+    var value = customvalueSwitch.checked ? smoothingCustomValue.value : smoothingSelectValue.value
+    value = fixValue(value);
+    if (value === '') {
+        value = 0;
+    }
+
+    parent.postMessage({ pluginMessage: { 
+        'type': 'smooth', 
+        'selection': smoothingApplyToSelection.checked,
+        'value': value
+    } }, '*');
 }

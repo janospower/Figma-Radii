@@ -2055,7 +2055,6 @@
 
         </style> <!-- Figma Plugin DS Styles -->
         <style>
-        @charset "UTF-8";
         .button--full {
           width: 100%; }
 
@@ -2063,8 +2062,6 @@
           color: var(--blue);
           text-decoration: none;
           cursor: default; }
-          a:after {
-            content: " ↗︎"; }
 
         .type {
           padding: 0 calc(var(--size-xxsmall) / 2) 0 var(--size-xxsmall); }
@@ -2076,14 +2073,29 @@
           left: auto;
           right: var(--size-xxxsmall); }
 
+        .inactive {
+          color: var(--black3-opaque); }
+          .inactive:hover {
+            color: var(--black8); }
+
+        hr {
+          border: 0;
+          height: 1px;
+          background: var(--silver);
+          margin-top: 0px; }
+
         </style> <!-- Your Styles -->
     </head>
     <body>
 
+    <div class="tabs flex p-xxsmall">
+        <div id="tabSmoothing" class="section-title">Corner smoothing</div>
+        <div id="tabSnap" class="section-title inactive">Snap radius</div>
+    </div>
+    <hr>
+
     <div class="p-xxsmall">
-
-
-        <div class="section-title">Corner smoothing</div>
+        
         
         <div class="type mb-xxsmall">Squircles can make your designs look better. <a href="https://help.figma.com/hc/en-us/articles/360038662654" rel="noopener" target="_blank">Learn more</a></div>
 
@@ -2097,8 +2109,8 @@
                 <!-- Select value -->
 
                 <select id="smoothingSelectValue" class="select-menu">
-                    <option value="0.6" >iOS</option>
-                    <option value="1" >Full squircle</option>
+                    <option value="60" >iOS</option>
+                    <option value="100" >Full squircle</option>
                     <option value="0" >CSS</option>
                 </select>
             </div>
@@ -2113,43 +2125,18 @@
             </div>
         </div>
         
+        <div class="switch mb-medium">
+            <input class="switch__toggle" type="checkbox" id="customvalueSwitch">
+            <label class="switch__label" for="customvalueSwitch">Custom value</label>
+        </div>
+
+        
+        <button id="smoothingApply" class='button button--primary' disabled>Apply</button>  
+
         <div class="switch mb-small">
-            <input class="switch__toggle" type="checkbox" id="cornerSmoothingSwitch">
-            <label class="switch__label" for="cornerSmoothingSwitch">Custom value</label>
+            <input class="switch__toggle" type="checkbox" id="smoothingApplyToSelection">
+            <label class="switch__label" for="smoothingApplyToSelection">Apply only to current selection</label>
         </div>
-
-        
-        <div class="switch">
-            <input class="switch__toggle" type="checkbox" id="autoApply" checked>
-            <label class="switch__label" for="autoApply">Auto-apply to current selection</label>
-        </div>
-
-        <button id="apply" class='button button--primary'>Apply to all</button>
-
-
-
-        <!-- Select menu -->
-        <div class="label">Shape</div>
-        <select id="shape" class="select-menu mb-xxsmall">
-            <option value="">Please select a shape...</option>
-            <option value="square">Square</option>
-            <option value="triangle" >Triangle</option>
-            <option value="circle" >Circle</option>
-        </select>
-
-        <!-- Count input -->
-        <div class="label">Count</div>
-        <div class="input input--with-icon mb-xxsmall">
-            <div class="icon">#</div>
-            <input id="count" type="input" class="input__field" value="5">
-        </div>
-
-        <!-- Buttons -->
-        <div class="flex p-xxsmall mb-xsmall">
-            <button id="cancel" class='button button--secondary mr-xxsmall'>Cancel</button>
-            <button id="createShapes" class='button button--primary'>Create shapes</button> 
-        </div>
-        
     </div>
 
     <script>
@@ -2626,13 +2613,22 @@
         console.log('testing');
     }
     //vars
+    const tabSmooth = document.querySelector('#tabSmooth');
+    const tabSelect = document.querySelector('#tabSelect');
+
     const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
     const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
     const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
     const smoothingCustomValueContainer = document.querySelector('#smoothingCustomValueContainer');
-    const cornerSmoothingSwitch = document.querySelector('#cornerSmoothingSwitch');
-    const autoApply = document.querySelector('#autoApply');
-    const apply = document.querySelector('#apply');
+
+    const customvalueSwitch = document.querySelector('#customvalueSwitch');
+
+    const smoothingApplyToSelection = document.querySelector('#smoothingApplyToSelection');
+    const smoothingApply = document.querySelector('#smoothingApply');
+
+    var selection = false;
+    var validInput = true;
+    var applicable = true;
 
 
     //on load function
@@ -2642,53 +2638,93 @@
 
     //initialize select menu
     selectMenu.init();
+    checkApply();
+
 
     //event listeners
-    cornerSmoothingSwitch.onchange = () => { 
+    onmessage = (event) => {
+        switch (event.data.pluginMessage.type) {
+            case 'selectionChange':
+                event.data.pluginMessage.value ? selection = true : selection = false;
+                checkApply();
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    customvalueSwitch.onchange = () => { 
         smoothingSelectValueContainer.classList.toggle('hidden');
         smoothingCustomValueContainer.classList.toggle('hidden');
+
+        customvalueSwitch.checked ? formValidation() : validInput = true;
+
+        checkApply();
+    }
+
+    smoothingApplyToSelection.onchange = () => { checkApply(); }
+
+    smoothingCustomValue.oninput = () => { formValidation(); }
+
+    smoothingCustomValue.addEventListener('blur', (event) => {
+        smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
+    });
+
+    smoothingCustomValue.addEventListener('keydown', (event) => {
+        if ( event.key === 'Enter' ) {
+            smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
+        }
+    });
+
+    smoothingApply.onclick = () => { 
+        var value = customvalueSwitch.checked ? smoothingCustomValue.value : smoothingSelectValue.value
+        value = fixValue(value);
+        if (value === '') {
+            value = 0;
+        }
+
+        parent.postMessage({ pluginMessage: { 
+            'type': 'smooth', 
+            'selection': smoothingApplyToSelection.checked,
+            'value': value
+        } }, '*');
     }
 
 
-
-
-
-
-    // old
-    const createShapesButton = document.querySelector('#createShapes');
-    const cancelButton = document.querySelector('#cancel');
-    const shapeMenu = document.querySelector('#shape');
-    const countInput = document.querySelector('#count');
-
-    //event listeners
-    countInput.oninput = () => { formValidation(); }
-    shapeMenu.onchange = () => { formValidation(); }
-    createShapesButton.onclick = () => { createShapes(); }
-    cancelButton.onclick = () => { cancel(); }
-
     //form validation
     var formValidation = function(event) {
-
-        if (shapeMenu.value === '' || countInput.value === '') {
-            createShapesButton.disabled = true;
+        if ( 0 <= smoothingCustomValue.value && smoothingCustomValue.value <= 100 ) {
+            validInput = true;
         } else {
-            createShapesButton.disabled = false;
+            validInput = false;
         }
+        checkApply();
     }
 
 
 
     //functions
-    function createShapes() {
+
+    function checkApply() {
+        applicable = selection && validInput || !smoothingApplyToSelection.checked && validInput
+        smoothingApply.disabled = !applicable;
+
         parent.postMessage({ pluginMessage: { 
-            'type': 'create-shapes', 
-            'count': countInput.value,
-            'shape': shapeMenu.value
+            'type': 'applicable', 
+            'value': applicable
         } }, '*');
+
     }
 
-    function cancel() {
-        parent.postMessage({ pluginMessage: { 'type': 'cancel' } }, '*')
+    function fixValue(val, min = 0, max = 100) {
+        if ( val < min || isNaN(val) ) {
+            val = min
+        }
+        else if ( val > max ) {
+            val = max
+        }
+        return val;
     }
     </script>
     </body>
