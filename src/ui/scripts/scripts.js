@@ -1,8 +1,12 @@
 //vars
-const createShapesButton = document.querySelector('#createShapes');
-const cancelButton = document.querySelector('#cancel');
-const shapeMenu = document.querySelector('#shape');
-const countInput = document.querySelector('#count');
+const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
+const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
+const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
+const smoothingCustomValueContainer = document.querySelector('#smoothingCustomValueContainer');
+const cornerSmoothingSwitch = document.querySelector('#cornerSmoothingSwitch');
+const autoApply = document.querySelector('#autoApply');
+const apply = document.querySelector('#apply');
+
 
 //on load function
 document.addEventListener("DOMContentLoaded", function() {
@@ -11,6 +15,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //initialize select menu
 selectMenu.init();
+
+//event listeners
+cornerSmoothingSwitch.onchange = () => { 
+    smoothingSelectValueContainer.classList.toggle('hidden');
+    smoothingCustomValueContainer.classList.toggle('hidden');
+}
+
+
+
+
+
+
+// old
+const createShapesButton = document.querySelector('#createShapes');
+const cancelButton = document.querySelector('#cancel');
+const shapeMenu = document.querySelector('#shape');
+const countInput = document.querySelector('#count');
 
 //event listeners
 countInput.oninput = () => { formValidation(); }

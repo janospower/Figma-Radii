@@ -2055,13 +2055,78 @@
 
         </style> <!-- Figma Plugin DS Styles -->
         <style>
-        /* Add your own scripts */
+        @charset "UTF-8";
+        .button--full {
+          width: 100%; }
+
+        a {
+          color: var(--blue);
+          text-decoration: none;
+          cursor: default; }
+          a:after {
+            content: " ↗︎"; }
+
+        .type {
+          padding: 0 calc(var(--size-xxsmall) / 2) 0 var(--size-xxsmall); }
+
+        div.select-menu {
+          flex-grow: 1; }
+
+        .input .icon--trailing {
+          left: auto;
+          right: var(--size-xxxsmall); }
 
         </style> <!-- Your Styles -->
     </head>
     <body>
 
     <div class="p-xxsmall">
+
+
+        <div class="section-title">Corner smoothing</div>
+        
+        <div class="type mb-xxsmall">Squircles can make your designs look better. <a href="https://help.figma.com/hc/en-us/articles/360038662654" rel="noopener" target="_blank">Learn more</a></div>
+
+
+        <div class="label">Amount</div>
+
+        <div id="smoothingSelectValueContainer">
+            <div class="flex">
+                <div class="icon icon--corner-radius"></div>
+
+                <!-- Select value -->
+
+                <select id="smoothingSelectValue" class="select-menu">
+                    <option value="0.6" >iOS</option>
+                    <option value="1" >Full squircle</option>
+                    <option value="0" >CSS</option>
+                </select>
+            </div>
+        </div>
+    
+        <!-- Custom value -->
+        <div id="smoothingCustomValueContainer" class="hidden">
+            <div class="input input--with-icon flex-grow">
+                <div class="icon icon--corner-radius"></div>
+                <input type="input" class="input__field" id="smoothingCustomValue" placeholder="100">
+                <div class="icon icon--trailing">%</div>
+            </div>
+        </div>
+        
+        <div class="switch mb-small">
+            <input class="switch__toggle" type="checkbox" id="cornerSmoothingSwitch">
+            <label class="switch__label" for="cornerSmoothingSwitch">Custom value</label>
+        </div>
+
+        
+        <div class="switch">
+            <input class="switch__toggle" type="checkbox" id="autoApply" checked>
+            <label class="switch__label" for="autoApply">Auto-apply to current selection</label>
+        </div>
+
+        <button id="apply" class='button button--primary'>Apply to all</button>
+
+
 
         <!-- Select menu -->
         <div class="label">Shape</div>
@@ -2561,10 +2626,14 @@
         console.log('testing');
     }
     //vars
-    const createShapesButton = document.querySelector('#createShapes');
-    const cancelButton = document.querySelector('#cancel');
-    const shapeMenu = document.querySelector('#shape');
-    const countInput = document.querySelector('#count');
+    const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
+    const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
+    const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
+    const smoothingCustomValueContainer = document.querySelector('#smoothingCustomValueContainer');
+    const cornerSmoothingSwitch = document.querySelector('#cornerSmoothingSwitch');
+    const autoApply = document.querySelector('#autoApply');
+    const apply = document.querySelector('#apply');
+
 
     //on load function
     document.addEventListener("DOMContentLoaded", function() {
@@ -2573,6 +2642,23 @@
 
     //initialize select menu
     selectMenu.init();
+
+    //event listeners
+    cornerSmoothingSwitch.onchange = () => { 
+        smoothingSelectValueContainer.classList.toggle('hidden');
+        smoothingCustomValueContainer.classList.toggle('hidden');
+    }
+
+
+
+
+
+
+    // old
+    const createShapesButton = document.querySelector('#createShapes');
+    const cancelButton = document.querySelector('#cancel');
+    const shapeMenu = document.querySelector('#shape');
+    const countInput = document.querySelector('#count');
 
     //event listeners
     countInput.oninput = () => { formValidation(); }

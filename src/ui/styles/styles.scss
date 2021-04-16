@@ -1,1 +1,25 @@
-/* Add your own scripts */
+.button--full {
+    width: 100%;
+}
+
+a {
+    color: var(--blue);
+    text-decoration: none;
+    cursor: default;
+    &:after {
+        content: " ↗︎";
+    }
+}
+
+.type {
+    padding: 0 calc(var(--size-xxsmall) / 2) 0 var(--size-xxsmall);
+}
+
+div.select-menu {
+    flex-grow: 1;
+}
+
+.input .icon--trailing {
+    left: auto;
+    right: var(--size-xxxsmall);
+}
