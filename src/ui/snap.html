@@ -1,0 +1,46 @@
+<div class="p-xxsmall">
+        
+        
+    <div class="type mb-xxsmall">Squircles can make your designs look better. <a href="https://www.figma.com/blog/desperately-seeking-squircles/" rel="noopener" target="_blank">Learn more</a></div>
+
+
+    <div class="label">Amount</div>
+
+    <div id="smoothingSelectValueContainer">
+        <div class="flex">
+            <div class="icon icon--corner-radius"></div>
+
+            <!-- Select value -->
+
+            <select id="smoothingSelectValue" class="select-menu">
+                <option value="60" >iOS</option>
+                <option value="100" >Full squircle</option>
+                <option value="0" >CSS</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Custom value -->
+    <div id="smoothingCustomValueContainer" class="hidden">
+        <div class="input input--with-icon flex-grow">
+            <div class="icon icon--corner-radius"></div>
+            <input type="input" class="input__field" id="smoothingCustomValue" placeholder="100">
+            <div class="icon icon--trailing">%</div>
+        </div>
+    </div>
+    
+    <div class="switch">
+        <input class="switch__toggle" type="checkbox" id="customvalueSwitch">
+        <label class="switch__label" for="customvalueSwitch">Custom value</label>
+    </div>
+
+</div>
+
+<div class="p-xxsmall bottom">
+    <button id="smoothingApply" class='button button--primary button--full' disabled>Apply</button>  
+
+    <div class="switch">
+        <input class="switch__toggle" type="checkbox" id="smoothingApplyToSelection">
+        <label class="switch__label" for="smoothingApplyToSelection">Only current selection</label>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-figma.showUI(__html__, {width: 375, height: 512 });
+figma.showUI(__uiFiles__.smooth, {width: 300, height: 500 });
 
 figma.on("selectionchange", () => { 
 		figma.ui.postMessage({
@@ -20,3 +20,5 @@ figma.ui.onmessage = msg => {
 		});
 	}
 };
+
+console.log(figma.command);

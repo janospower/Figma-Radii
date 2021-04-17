@@ -1,5 +1,6 @@
 .button--full {
     width: 100%;
+    display: block;
 }
 
 a {
@@ -33,4 +34,11 @@ hr {
     height: 1px;
     background: var(--silver);
     margin-top: 0px;;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    left: 0px;
 }

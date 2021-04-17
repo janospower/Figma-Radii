@@ -1,0 +1,35 @@
+.button--full {
+  width: 100%;
+  display: block; }
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+  cursor: default; }
+
+.type {
+  padding: 0 calc(var(--size-xxsmall) / 2) 0 var(--size-xxsmall); }
+
+div.select-menu {
+  flex-grow: 1; }
+
+.input .icon--trailing {
+  left: auto;
+  right: var(--size-xxxsmall); }
+
+.inactive {
+  color: var(--black3-opaque); }
+  .inactive:hover {
+    color: var(--black8); }
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--silver);
+  margin-top: 0px; }
+
+.bottom {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  left: 0px; }
