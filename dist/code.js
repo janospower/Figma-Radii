@@ -22,3 +22,7 @@ figma.ui.postMessage({
     type: 'modeChange',
     value: figma.command
 });
+figma.ui.postMessage({
+    type: 'selectionChange',
+    value: figma.currentPage.selection.length
+});

@@ -22,7 +22,8 @@ onmessage = (event) => {
     switch (event.data.pluginMessage.type) {
         case 'selectionChange':
             event.data.pluginMessage.value ? selection = true : selection = false;
-            checkApply();
+            smoothingCheckApply();
+            snapCheckApply();
             break;
 
         case 'modeChange':
@@ -39,14 +40,31 @@ const radii = document.querySelector('#radii');
 const radiusOriginal = document.querySelector('#radius-original');
 const addRadiusButton = document.querySelector('#add-radius');
 
+const snapApply = document.querySelector('#snapApply');
+const snapApplyToSelection = document.querySelector('#snapApplyToSelection');
+
 let count = 0;
 let radiusValues = [];
+let radiusValuesPopulated = false;
+
+snapApplyToSelection.onchange = () => { snapCheckApply() };
+
+snapApply.onclick = () => {
+    parent.postMessage({ pluginMessage: { 
+        'type': 'snap', 
+        'selection': snapApplyToSelection.checked,
+        'value': radiusValues
+    } }, '*');
+}
 
 addRadiusButton.onclick = () => {
     addRadius();
+    snapCheckApply();
 }
 
 function addRadius() {
+    radiusValuesPopulated = true;
+
     let currentCount = count;
     radiusValues.push('0');
     let radiusNew = radiusOriginal.cloneNode( true );
@@ -57,15 +75,30 @@ function addRadius() {
     let input = radiusNew.querySelector('input');
     input.oninput = () => {
         radiusValues[currentCount] = input.value;
+
+        snapCheckApply();
     }
 
     let remove = radiusNew.querySelector('.remove-button');
     remove.onclick = () => {
         radiusValues[currentCount] = false;
         radii.querySelector(`#radius-${currentCount}`).remove();
+
+
+        radiusValuesPopulated = false;
+        radiusValues.forEach(value => {
+            radiusValuesPopulated = radiusValuesPopulated || value;
+        });
+
+        snapCheckApply();
     }
 
     count++;
+}
+
+function snapCheckApply() {
+    snapApplicable = radiusValuesPopulated && !snapApplyToSelection.checked || radiusValuesPopulated && selection;
+    snapApply.disabled = !snapApplicable;
 }
 
 // smoothing
@@ -83,7 +116,7 @@ const smoothingApply = document.querySelector('#smoothingApply');
 
 var selection = false;
 var validInput = true;
-var applicable = true;
+var smoothingApplicable = true;
 
 
 //on load function
@@ -93,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //initialize select menu
 selectMenu.init();
-checkApply();
+smoothingCheckApply();
 
 
 //event listeners
@@ -105,10 +138,10 @@ customvalueSwitch.onchange = () => {
 
     customvalueSwitch.checked ? formValidation() : validInput = true;
 
-    checkApply();
+    smoothingCheckApply();
 }
 
-smoothingApplyToSelection.onchange = () => { checkApply(); }
+smoothingApplyToSelection.onchange = () => { smoothingCheckApply(); }
 
 smoothingCustomValue.oninput = () => { formValidation(); }
 
@@ -135,22 +168,16 @@ var formValidation = function(event) {
     } else {
         validInput = false;
     }
-    checkApply();
+    smoothingCheckApply();
 }
 
 
 
 //functions
 
-function checkApply() {
-    applicable = selection && validInput || !smoothingApplyToSelection.checked && validInput
-    smoothingApply.disabled = !applicable;
-
-    parent.postMessage({ pluginMessage: { 
-        'type': 'applicable', 
-        'value': applicable
-    } }, '*');
-
+function smoothingCheckApply() {
+    smoothingApplicable = selection && validInput || !smoothingApplyToSelection.checked && validInput
+    smoothingApply.disabled = !smoothingApplicable;
 }
 
 function fixValue(val, min = 0, max = 100) {
