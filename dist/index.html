@@ -2093,10 +2093,12 @@
           margin: 0px; }
 
         .bottom {
-          position: absolute;
+          position: fixed;
           bottom: 0px;
           width: 100%;
-          left: 0px; }
+          left: 0px;
+          background-color: white;
+          z-index: 100; }
 
         .section-title .icon-button {
           left: auto;
@@ -2122,32 +2124,32 @@
     
             <div class="label">Amount</div>
     
-            <div id="smoothingSelectValueContainer">
+            <div id="smoothingSelectvalContainer">
                 <div class="flex">
                     <div class="icon icon--corner-radius"></div>
     
-                    <!-- Select value -->
+                    <!-- Select val -->
     
-                    <select id="smoothingSelectValue" class="select-menu">
-                        <option value="60" >iOS</option>
-                        <option value="100" >Full squircle</option>
-                        <option value="0" >CSS</option>
+                    <select id="smoothingSelectval" class="select-menu">
+                        <option val="60" >iOS</option>
+                        <option val="100" >Full squircle</option>
+                        <option val="0" >CSS</option>
                     </select>
                 </div>
             </div>
         
-            <!-- Custom value -->
-            <div id="smoothingCustomValueContainer" class="hidden">
+            <!-- Custom val -->
+            <div id="smoothingCustomvalContainer" class="hidden">
                 <div class="input input--with-icon flex-grow">
                     <div class="icon icon--corner-radius"></div>
-                    <input type="input" class="input__field" id="smoothingCustomValue" placeholder="100">
+                    <input type="input" class="input__field" id="smoothingCustomval" placeholder="100">
                     <div class="icon icon--trailing">%</div>
                 </div>
             </div>
             
             <div class="switch">
-                <input class="switch__toggle" type="checkbox" id="customvalueSwitch">
-                <label class="switch__label" for="customvalueSwitch">Custom value</label>
+                <input class="switch__toggle" type="checkbox" id="customvalSwitch">
+                <label class="switch__label" for="customvalSwitch">Custom val</label>
             </div>
     
         </div>
@@ -2184,12 +2186,12 @@
 
         </div>
         <hr>
-        <div id="radii" class="p-xxsmall">
+        <div id="radii" class="p-xxsmall pb-xxxlarge">
             <div class="hidden">
                 <div id="radius-original" class="radius mb-xxxsmall flex">
                     <div class="input input--with-icon flex-grow">
                         <div class="icon icon--corner-radius"></div>
-                        <input type="input" class="input__field" value="0">
+                        <input type="input" class="input__field" val="0">
                       </div>
                     <div class="icon-button remove-button">
                         <div class="icon icon--minus"></div>
@@ -2705,13 +2707,13 @@
     onmessage = (event) => {
         switch (event.data.pluginMessage.type) {
             case 'selectionChange':
-                event.data.pluginMessage.value ? selection = true : selection = false;
+                event.data.pluginMessage.val ? selection = true : selection = false;
                 smoothingCheckApply();
                 snapCheckApply();
                 break;
 
             case 'modeChange':
-                activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
+                activateTab( document.querySelector( `#${event.data.pluginMessage.val}` ) );
                 break;
         
             default:
@@ -2728,8 +2730,8 @@
     const snapApplyToSelection = document.querySelector('#snapApplyToSelection');
 
     let count = 0;
-    let radiusValues = [];
-    let radiusValuesPopulated = false;
+    let radiusvals = [];
+    let radiusvalsPopulated = false;
 
     snapApplyToSelection.onchange = () => { snapCheckApply() };
 
@@ -2737,7 +2739,7 @@
         parent.postMessage({ pluginMessage: { 
             'type': 'snap', 
             'selection': snapApplyToSelection.checked,
-            'values': radiusValues
+            'vals': radiusvals
         } }, '*');
     }
 
@@ -2747,10 +2749,10 @@
     }
 
     function addRadius() {
-        radiusValuesPopulated = true;
+        radiusvalsPopulated = true;
 
         let currentCount = count;
-        radiusValues.push('0');
+        radiusvals.push('0');
         let radiusNew = radiusOriginal.cloneNode( true );
         radiusNew.setAttribute( 'id', `radius-${currentCount}` );
         radiusNew.classList.remove('hidden');
@@ -2758,20 +2760,20 @@
 
         let input = radiusNew.querySelector('input');
         input.oninput = () => {
-            radiusValues[currentCount] = input.value;
+            radiusvals[currentCount] = input.val;
 
             snapCheckApply();
         }
 
         let remove = radiusNew.querySelector('.remove-button');
         remove.onclick = () => {
-            radiusValues[currentCount] = false;
+            radiusvals[currentCount] = false;
             radii.querySelector(`#radius-${currentCount}`).remove();
 
 
-            radiusValuesPopulated = false;
-            radiusValues.forEach(value => {
-                radiusValuesPopulated = radiusValuesPopulated || value;
+            radiusvalsPopulated = false;
+            radiusvals.forEach(val => {
+                radiusvalsPopulated = radiusvalsPopulated || val;
             });
 
             snapCheckApply();
@@ -2781,19 +2783,19 @@
     }
 
     function snapCheckApply() {
-        snapApplicable = radiusValuesPopulated && !snapApplyToSelection.checked || radiusValuesPopulated && selection;
+        snapApplicable = radiusvalsPopulated && !snapApplyToSelection.checked || radiusvalsPopulated && selection;
         snapApply.disabled = !snapApplicable;
     }
 
     // smoothing
 
     //vars
-    const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
-    const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
-    const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
-    const smoothingCustomValueContainer = document.querySelector('#smoothingCustomValueContainer');
+    const smoothingSelectval = document.querySelector('#smoothingSelectval');
+    const smoothingSelectvalContainer = document.querySelector('#smoothingSelectvalContainer');
+    const smoothingCustomval = document.querySelector('#smoothingCustomval');
+    const smoothingCustomvalContainer = document.querySelector('#smoothingCustomvalContainer');
 
-    const customvalueSwitch = document.querySelector('#customvalueSwitch');
+    const customvalSwitch = document.querySelector('#customvalSwitch');
 
     const smoothingApplyToSelection = document.querySelector('#smoothingApplyToSelection');
     const smoothingApply = document.querySelector('#smoothingApply');
@@ -2816,27 +2818,27 @@
     //event listeners
 
 
-    customvalueSwitch.onchange = () => { 
-        smoothingSelectValueContainer.classList.toggle('hidden');
-        smoothingCustomValueContainer.classList.toggle('hidden');
+    customvalSwitch.onchange = () => { 
+        smoothingSelectvalContainer.classList.toggle('hidden');
+        smoothingCustomvalContainer.classList.toggle('hidden');
 
-        customvalueSwitch.checked ? formValidation() : validInput = true;
+        customvalSwitch.checked ? formValidation() : validInput = true;
 
         smoothingCheckApply();
     }
 
     smoothingApplyToSelection.onchange = () => { smoothingCheckApply(); }
 
-    smoothingCustomValue.oninput = () => { formValidation(); }
+    smoothingCustomval.oninput = () => { formValidation(); }
 
-    smoothingCustomValue.addEventListener('blur', (event) => {
-        smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
+    smoothingCustomval.addEventListener('blur', (event) => {
+        smoothingCustomval.val = fixval(smoothingCustomval.val);
     });
 
-    smoothingCustomValue.addEventListener('keydown', (event) => {
+    smoothingCustomval.addEventListener('keydown', (event) => {
         if ( event.key === 'Enter' ) {
             sendSmoothing();
-            smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
+            smoothingCustomval.val = fixval(smoothingCustomval.val);
         }
     });
 
@@ -2847,7 +2849,7 @@
 
     //form validation
     var formValidation = function(event) {
-        if ( 0 <= smoothingCustomValue.value && smoothingCustomValue.value <= 100 ) {
+        if ( 0 <= smoothingCustomval.val && smoothingCustomval.val <= 100 ) {
             validInput = true;
         } else {
             validInput = false;
@@ -2864,7 +2866,7 @@
         smoothingApply.disabled = !smoothingApplicable;
     }
 
-    function fixValue(val, min = 0, max = 100) {
+    function fixval(val, min = 0, max = 100) {
         if ( val < min || isNaN(val) ) {
             val = min
         }
@@ -2875,16 +2877,16 @@
     }
 
     function sendSmoothing() {
-        var value = customvalueSwitch.checked ? smoothingCustomValue.value : smoothingSelectValue.value
-        value = fixValue(value);
-        if (value === '') {
-            value = 0;
+        var val = customvalSwitch.checked ? smoothingCustomval.val : smoothingSelectval.val
+        val = fixval(val);
+        if (val === '') {
+            val = 0;
         }
 
         parent.postMessage({ pluginMessage: { 
             'type': 'smooth', 
             'selection': smoothingApplyToSelection.checked,
-            'value': value
+            'val': val
         } }, '*');
     }
     </script>
