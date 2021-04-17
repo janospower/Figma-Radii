@@ -2074,6 +2074,13 @@
           left: auto;
           right: var(--size-xxxsmall); }
 
+        .title.inactive:hover .inactive {
+          color: var(--black8); }
+
+        .title.inactive:hover .icon-button {
+          -webkit-filter: none;
+          filter: none; }
+
         .inactive {
           color: var(--black3-opaque); }
           .inactive:hover {
@@ -2090,6 +2097,10 @@
           bottom: 0px;
           width: 100%;
           left: 0px; }
+
+        .section-title .icon-button {
+          left: auto;
+          right: 0px; }
 
         </style>
     </head>
@@ -2161,14 +2172,30 @@
 
         </div>
         <hr>
-        <div class="p-xxsmall">
+        <div class="p-xxsmall title inactive flex">
 
-            <div class="section-title inactive">Radius</div>
+            <div class="section-title inactive">
+                Radius 
+            </div>
+
+            <div id="add-radius" class="icon-button icon--black3">
+                <div class="icon icon--plus"></div>
+            </div>
 
         </div>
         <hr>
-        <div class="p-xxsmall">
-    
+        <div id="radii" class="p-xxsmall">
+            <div class="hidden">
+                <div id="radius-original" class="radius mb-xxxsmall flex">
+                    <div class="input input--with-icon flex-grow">
+                        <div class="icon icon--corner-radius"></div>
+                        <input type="input" class="input__field" value="0">
+                      </div>
+                    <div class="icon-button">
+                        <div class="icon icon--minus"></div>
+                    </div>
+                </div>
+            </div>
     
         </div>
 
@@ -2675,6 +2702,39 @@
         document.querySelector(`#${tab.id}-container`).classList.remove('hidden');
     }
 
+    onmessage = (event) => {
+        switch (event.data.pluginMessage.type) {
+            case 'selectionChange':
+                event.data.pluginMessage.value ? selection = true : selection = false;
+                checkApply();
+                break;
+
+            case 'modeChange':
+                activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    // snapping
+    const radii = document.querySelector('#radii');
+    const radiusOriginal = document.querySelector('#radius-original');
+    const addRadius = document.querySelector('#add-radius');
+
+    let count = 0;
+    let radiusValues = [];
+
+    addRadius.onclick = () => {
+        radiusValues.push(count);
+        count++;
+        let radiusNew = radiusOriginal.cloneNode( true );
+        radiusNew.setAttribute( 'id', `radius-${count}` );
+        radiusNew.classList.remove('hidden');
+        radii.append(radiusNew);
+    }
+
     // smoothing
 
     //vars
@@ -2704,21 +2764,7 @@
 
 
     //event listeners
-    onmessage = (event) => {
-        switch (event.data.pluginMessage.type) {
-            case 'selectionChange':
-                event.data.pluginMessage.value ? selection = true : selection = false;
-                checkApply();
-                break;
 
-            case 'modeChange':
-                activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
-                break;
-        
-            default:
-                break;
-        }
-    }
 
     customvalueSwitch.onchange = () => { 
         smoothingSelectValueContainer.classList.toggle('hidden');

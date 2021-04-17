@@ -22,6 +22,16 @@ div.select-menu {
     right: var(--size-xxxsmall);
 }
 
+.title.inactive:hover {
+    .inactive {
+        color: var(--black8);
+    }
+    
+    .icon-button {
+        -webkit-filter: none;
+        filter: none;
+    }
+}
 .inactive {
     color: var(--black3-opaque);
     &:hover {
@@ -41,4 +51,9 @@ hr {
     bottom: 0px;
     width: 100%;
     left: 0px;
+}
+
+.section-title .icon-button {
+    left: auto;
+    right: 0px;
 }

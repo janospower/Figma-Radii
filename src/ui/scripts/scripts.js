@@ -18,6 +18,39 @@ function activateTab(tab) {
     document.querySelector(`#${tab.id}-container`).classList.remove('hidden');
 }
 
+onmessage = (event) => {
+    switch (event.data.pluginMessage.type) {
+        case 'selectionChange':
+            event.data.pluginMessage.value ? selection = true : selection = false;
+            checkApply();
+            break;
+
+        case 'modeChange':
+            activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
+            break;
+    
+        default:
+            break;
+    }
+}
+
+// snapping
+const radii = document.querySelector('#radii');
+const radiusOriginal = document.querySelector('#radius-original');
+const addRadius = document.querySelector('#add-radius');
+
+let count = 0;
+let radiusValues = [];
+
+addRadius.onclick = () => {
+    radiusValues.push(count);
+    count++;
+    let radiusNew = radiusOriginal.cloneNode( true );
+    radiusNew.setAttribute( 'id', `radius-${count}` );
+    radiusNew.classList.remove('hidden');
+    radii.append(radiusNew);
+}
+
 // smoothing
 
 //vars
@@ -47,21 +80,7 @@ checkApply();
 
 
 //event listeners
-onmessage = (event) => {
-    switch (event.data.pluginMessage.type) {
-        case 'selectionChange':
-            event.data.pluginMessage.value ? selection = true : selection = false;
-            checkApply();
-            break;
 
-        case 'modeChange':
-            activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
-            break;
-    
-        default:
-            break;
-    }
-}
 
 customvalueSwitch.onchange = () => { 
     smoothingSelectValueContainer.classList.toggle('hidden');
