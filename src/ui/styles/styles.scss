@@ -47,12 +47,10 @@ hr {
 }
 
 .bottom {
-    position: fixed;
+    position: absolute;
     bottom: 0px;
     width: 100%;
     left: 0px;
-    background-color: white;
-    z-index: 100;
 }
 
 .section-title .icon-button {

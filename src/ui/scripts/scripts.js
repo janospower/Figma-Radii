@@ -21,13 +21,13 @@ function activateTab(tab) {
 onmessage = (event) => {
     switch (event.data.pluginMessage.type) {
         case 'selectionChange':
-            event.data.pluginMessage.val ? selection = true : selection = false;
+            event.data.pluginMessage.value ? selection = true : selection = false;
             smoothingCheckApply();
             snapCheckApply();
             break;
 
         case 'modeChange':
-            activateTab( document.querySelector( `#${event.data.pluginMessage.val}` ) );
+            activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
             break;
     
         default:
@@ -44,8 +44,8 @@ const snapApply = document.querySelector('#snapApply');
 const snapApplyToSelection = document.querySelector('#snapApplyToSelection');
 
 let count = 0;
-let radiusvals = [];
-let radiusvalsPopulated = false;
+let radiusValues = [];
+let radiusValuesPopulated = false;
 
 snapApplyToSelection.onchange = () => { snapCheckApply() };
 
@@ -53,7 +53,7 @@ snapApply.onclick = () => {
     parent.postMessage({ pluginMessage: { 
         'type': 'snap', 
         'selection': snapApplyToSelection.checked,
-        'vals': radiusvals
+        'values': radiusValues
     } }, '*');
 }
 
@@ -63,10 +63,10 @@ addRadiusButton.onclick = () => {
 }
 
 function addRadius() {
-    radiusvalsPopulated = true;
+    radiusValuesPopulated = true;
 
     let currentCount = count;
-    radiusvals.push('0');
+    radiusValues.push('0');
     let radiusNew = radiusOriginal.cloneNode( true );
     radiusNew.setAttribute( 'id', `radius-${currentCount}` );
     radiusNew.classList.remove('hidden');
@@ -74,20 +74,20 @@ function addRadius() {
 
     let input = radiusNew.querySelector('input');
     input.oninput = () => {
-        radiusvals[currentCount] = input.val;
+        radiusValues[currentCount] = input.value;
 
         snapCheckApply();
     }
 
     let remove = radiusNew.querySelector('.remove-button');
     remove.onclick = () => {
-        radiusvals[currentCount] = false;
+        radiusValues[currentCount] = false;
         radii.querySelector(`#radius-${currentCount}`).remove();
 
 
-        radiusvalsPopulated = false;
-        radiusvals.forEach(val => {
-            radiusvalsPopulated = radiusvalsPopulated || val;
+        radiusValuesPopulated = false;
+        radiusValues.forEach(value => {
+            radiusValuesPopulated = radiusValuesPopulated || value;
         });
 
         snapCheckApply();
@@ -97,19 +97,19 @@ function addRadius() {
 }
 
 function snapCheckApply() {
-    snapApplicable = radiusvalsPopulated && !snapApplyToSelection.checked || radiusvalsPopulated && selection;
+    snapApplicable = radiusValuesPopulated && !snapApplyToSelection.checked || radiusValuesPopulated && selection;
     snapApply.disabled = !snapApplicable;
 }
 
 // smoothing
 
 //vars
-const smoothingSelectval = document.querySelector('#smoothingSelectval');
-const smoothingSelectvalContainer = document.querySelector('#smoothingSelectvalContainer');
-const smoothingCustomval = document.querySelector('#smoothingCustomval');
-const smoothingCustomvalContainer = document.querySelector('#smoothingCustomvalContainer');
+const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
+const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
+const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
+const smoothingCustomValueContainer = document.querySelector('#smoothingCustomValueContainer');
 
-const customvalSwitch = document.querySelector('#customvalSwitch');
+const customvalueSwitch = document.querySelector('#customvalueSwitch');
 
 const smoothingApplyToSelection = document.querySelector('#smoothingApplyToSelection');
 const smoothingApply = document.querySelector('#smoothingApply');
@@ -132,27 +132,27 @@ smoothingCheckApply();
 //event listeners
 
 
-customvalSwitch.onchange = () => { 
-    smoothingSelectvalContainer.classList.toggle('hidden');
-    smoothingCustomvalContainer.classList.toggle('hidden');
+customvalueSwitch.onchange = () => { 
+    smoothingSelectValueContainer.classList.toggle('hidden');
+    smoothingCustomValueContainer.classList.toggle('hidden');
 
-    customvalSwitch.checked ? formValidation() : validInput = true;
+    customvalueSwitch.checked ? formValidation() : validInput = true;
 
     smoothingCheckApply();
 }
 
 smoothingApplyToSelection.onchange = () => { smoothingCheckApply(); }
 
-smoothingCustomval.oninput = () => { formValidation(); }
+smoothingCustomValue.oninput = () => { formValidation(); }
 
-smoothingCustomval.addEventListener('blur', (event) => {
-    smoothingCustomval.val = fixval(smoothingCustomval.val);
+smoothingCustomValue.addEventListener('blur', (event) => {
+    smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
 });
 
-smoothingCustomval.addEventListener('keydown', (event) => {
+smoothingCustomValue.addEventListener('keydown', (event) => {
     if ( event.key === 'Enter' ) {
         sendSmoothing();
-        smoothingCustomval.val = fixval(smoothingCustomval.val);
+        smoothingCustomValue.value = fixValue(smoothingCustomValue.value);
     }
 });
 
@@ -163,7 +163,7 @@ smoothingApply.onclick = () => {
 
 //form validation
 var formValidation = function(event) {
-    if ( 0 <= smoothingCustomval.val && smoothingCustomval.val <= 100 ) {
+    if ( 0 <= smoothingCustomValue.value && smoothingCustomValue.value <= 100 ) {
         validInput = true;
     } else {
         validInput = false;
@@ -180,7 +180,7 @@ function smoothingCheckApply() {
     smoothingApply.disabled = !smoothingApplicable;
 }
 
-function fixval(val, min = 0, max = 100) {
+function fixValue(val, min = 0, max = 100) {
     if ( val < min || isNaN(val) ) {
         val = min
     }
@@ -191,15 +191,15 @@ function fixval(val, min = 0, max = 100) {
 }
 
 function sendSmoothing() {
-    var val = customvalSwitch.checked ? smoothingCustomval.val : smoothingSelectval.val
-    val = fixval(val);
-    if (val === '') {
-        val = 0;
+    var value = customvalueSwitch.checked ? smoothingCustomValue.value : smoothingSelectValue.value
+    value = fixValue(value);
+    if (value === '') {
+        value = 0;
     }
 
     parent.postMessage({ pluginMessage: { 
         'type': 'smooth', 
         'selection': smoothingApplyToSelection.checked,
-        'val': val
+        'value': value
     } }, '*');
 }
