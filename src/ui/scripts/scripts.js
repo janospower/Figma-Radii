@@ -57,7 +57,12 @@ function addRadius() {
     let input = radiusNew.querySelector('input');
     input.oninput = () => {
         radiusValues[currentCount] = input.value;
-        console.log(radiusValues);
+    }
+
+    let remove = radiusNew.querySelector('.remove-button');
+    remove.onclick = () => {
+        radiusValues[currentCount] = false;
+        radii.querySelector(`#radius-${currentCount}`).remove();
     }
 
     count++;
