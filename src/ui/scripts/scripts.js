@@ -53,7 +53,9 @@ snapApply.onclick = () => {
     parent.postMessage({ pluginMessage: { 
         'type': 'snap', 
         'selection': snapApplyToSelection.checked,
-        'values': radiusValues
+        'values': radiusValues.filter(function (value) {
+            return value !== false;
+          })
     } }, '*');
 }
 

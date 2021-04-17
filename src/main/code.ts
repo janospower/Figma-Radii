@@ -38,7 +38,7 @@ figma.ui.onmessage = msg => {
 				node.topLeftRadius = newRadius;
 				
 
-				msg.values.forEach(value => {
+				msg.values.forEach((value: any) => {
 					let currentValue = parseInt( value );
 					difference = Math.abs( currentValue - currentRadius );
 					
@@ -61,7 +61,7 @@ figma.ui.onmessage = msg => {
 				node.topRightRadius = newRadius;
 				
 
-				msg.values.forEach(value => {
+				msg.values.forEach((value: any) => {
 					let currentValue = parseInt( value );
 					difference = Math.abs( currentValue - currentRadius );
 					
@@ -84,7 +84,7 @@ figma.ui.onmessage = msg => {
 				node.bottomLeftRadius = newRadius;
 				
 
-				msg.values.forEach(value => {
+				msg.values.forEach((value: any) => {
 					let currentValue = parseInt( value );
 					difference = Math.abs( currentValue - currentRadius );
 					
@@ -107,7 +107,7 @@ figma.ui.onmessage = msg => {
 				node.bottomRightRadius = newRadius;
 				
 
-				msg.values.forEach(value => {
+				msg.values.forEach((value: any) => {
 					let currentValue = parseInt( value );
 					difference = Math.abs( currentValue - currentRadius );
 					

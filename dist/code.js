@@ -31,7 +31,7 @@ figma.ui.onmessage = msg => {
                 let difference;
                 let smallestDifference = Math.abs(newRadius - currentRadius);
                 node.topLeftRadius = newRadius;
-                msg.values.forEach(value => {
+                msg.values.forEach((value) => {
                     let currentValue = parseInt(value);
                     difference = Math.abs(currentValue - currentRadius);
                     if (difference < smallestDifference) {
@@ -47,7 +47,7 @@ figma.ui.onmessage = msg => {
                 let difference;
                 let smallestDifference = Math.abs(newRadius - currentRadius);
                 node.topRightRadius = newRadius;
-                msg.values.forEach(value => {
+                msg.values.forEach((value) => {
                     let currentValue = parseInt(value);
                     difference = Math.abs(currentValue - currentRadius);
                     if (difference < smallestDifference) {
@@ -63,7 +63,7 @@ figma.ui.onmessage = msg => {
                 let difference;
                 let smallestDifference = Math.abs(newRadius - currentRadius);
                 node.bottomLeftRadius = newRadius;
-                msg.values.forEach(value => {
+                msg.values.forEach((value) => {
                     let currentValue = parseInt(value);
                     difference = Math.abs(currentValue - currentRadius);
                     if (difference < smallestDifference) {
@@ -79,7 +79,7 @@ figma.ui.onmessage = msg => {
                 let difference;
                 let smallestDifference = Math.abs(newRadius - currentRadius);
                 node.bottomRightRadius = newRadius;
-                msg.values.forEach(value => {
+                msg.values.forEach((value) => {
                     let currentValue = parseInt(value);
                     difference = Math.abs(currentValue - currentRadius);
                     if (difference < smallestDifference) {

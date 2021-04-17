@@ -2093,10 +2093,12 @@
           margin: 0px; }
 
         .bottom {
-          position: absolute;
+          position: fixed;
           bottom: 0px;
           width: 100%;
-          left: 0px; }
+          left: 0px;
+          background-color: white;
+          z-index: 100; }
 
         .section-title .icon-button {
           left: auto;
@@ -2184,7 +2186,7 @@
 
         </div>
         <hr>
-        <div id="radii" class="p-xxsmall">
+        <div id="radii" class="p-xxsmall l pb-xxxlarge">
             <div class="hidden">
                 <div id="radius-original" class="radius mb-xxxsmall flex">
                     <div class="input input--with-icon flex-grow">
@@ -2737,7 +2739,9 @@
         parent.postMessage({ pluginMessage: { 
             'type': 'snap', 
             'selection': snapApplyToSelection.checked,
-            'values': radiusValues
+            'values': radiusValues.filter(function (value) {
+                return value !== false;
+              })
         } }, '*');
     }
 
