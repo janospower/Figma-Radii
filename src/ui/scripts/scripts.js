@@ -29,6 +29,11 @@ onmessage = (event) => {
         case 'modeChange':
             activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
             break;
+
+        case 'state':
+            let radiusValues2 = event.data.pluginMessage.value;
+            console.log(radiusValues2);
+            break;
     
         default:
             break;
@@ -101,6 +106,13 @@ function addRadius() {
 function snapCheckApply() {
     snapApplicable = radiusValuesPopulated && !snapApplyToSelection.checked || radiusValuesPopulated && selection;
     snapApply.disabled = !snapApplicable;
+
+    parent.postMessage({ pluginMessage: { 
+        'type': 'snap-change', 
+        'values': radiusValues.filter(function (value) {
+            return value !== false;
+          })
+    } }, '*');
 }
 
 // smoothing

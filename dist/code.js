@@ -1,4 +1,11 @@
 figma.showUI(__html__, { width: 300, height: 500 });
+let state = [];
+// let lastState = figma.clientStorage.getAsync('state')
+// console.log(lastState);
+// figma.ui.postMessage({
+// 	type: 'state',
+// 	value: lastState
+//   })
 figma.on("selectionchange", () => {
     figma.ui.postMessage({
         type: 'selectionChange',
@@ -19,6 +26,9 @@ figma.ui.onmessage = msg => {
     }
 };
 figma.ui.onmessage = msg => {
+    if (msg.type === 'snap-change') {
+        state = msg.values;
+    }
     if (msg.type === 'snap') {
         let nodes = figma.currentPage.selection;
         if (!msg.selection) {
@@ -99,4 +109,8 @@ figma.ui.postMessage({
 figma.ui.postMessage({
     type: 'selectionChange',
     value: figma.currentPage.selection.length
+});
+figma.on("close", () => {
+    figma.clientStorage.setAsync('state', state);
+    console.log('state', state);
 });
