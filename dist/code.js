@@ -18,6 +18,32 @@ figma.ui.onmessage = msg => {
         });
     }
 };
+figma.ui.onmessage = msg => {
+    if (msg.type === 'snap') {
+        let nodes = figma.currentPage.selection;
+        if (!msg.selection) {
+            nodes = figma.currentPage.findAll(n => n.type === "RECTANGLE" || n.type === "FRAME" || n.type === "COMPONENT");
+        }
+        nodes.forEach(node => {
+            if ("topLeftRadius" in node) {
+                let newRadius = parseInt(msg.values[0]);
+                let currentRadius = node.topLeftRadius;
+                let difference;
+                let smallestDifference = Math.abs(newRadius - currentRadius);
+                node.topLeftRadius = newRadius;
+                msg.values.forEach(value => {
+                    let currentValue = parseInt(value);
+                    difference = Math.abs(currentValue - currentRadius);
+                    if (difference < smallestDifference) {
+                        newRadius = currentValue;
+                        smallestDifference = Math.abs(newRadius - currentRadius);
+                    }
+                });
+                node.topLeftRadius = newRadius;
+            }
+        });
+    }
+};
 figma.ui.postMessage({
     type: 'modeChange',
     value: figma.command
