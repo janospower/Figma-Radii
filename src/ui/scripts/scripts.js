@@ -37,18 +37,30 @@ onmessage = (event) => {
 // snapping
 const radii = document.querySelector('#radii');
 const radiusOriginal = document.querySelector('#radius-original');
-const addRadius = document.querySelector('#add-radius');
+const addRadiusButton = document.querySelector('#add-radius');
 
 let count = 0;
 let radiusValues = [];
 
-addRadius.onclick = () => {
-    radiusValues.push(count);
-    count++;
+addRadiusButton.onclick = () => {
+    addRadius();
+}
+
+function addRadius() {
+    let currentCount = count;
+    radiusValues.push('0');
     let radiusNew = radiusOriginal.cloneNode( true );
-    radiusNew.setAttribute( 'id', `radius-${count}` );
+    radiusNew.setAttribute( 'id', `radius-${currentCount}` );
     radiusNew.classList.remove('hidden');
     radii.append(radiusNew);
+
+    let input = radiusNew.querySelector('input');
+    input.oninput = () => {
+        radiusValues[currentCount] = input.value;
+        console.log(radiusValues);
+    }
+
+    count++;
 }
 
 // smoothing
