@@ -41,6 +41,54 @@ figma.ui.onmessage = msg => {
                 });
                 node.topLeftRadius = newRadius;
             }
+            if ("topRightRadius" in node) {
+                let newRadius = parseInt(msg.values[0]);
+                let currentRadius = node.topRightRadius;
+                let difference;
+                let smallestDifference = Math.abs(newRadius - currentRadius);
+                node.topRightRadius = newRadius;
+                msg.values.forEach(value => {
+                    let currentValue = parseInt(value);
+                    difference = Math.abs(currentValue - currentRadius);
+                    if (difference < smallestDifference) {
+                        newRadius = currentValue;
+                        smallestDifference = Math.abs(newRadius - currentRadius);
+                    }
+                });
+                node.topRightRadius = newRadius;
+            }
+            if ("bottomLeftRadius" in node) {
+                let newRadius = parseInt(msg.values[0]);
+                let currentRadius = node.bottomLeftRadius;
+                let difference;
+                let smallestDifference = Math.abs(newRadius - currentRadius);
+                node.bottomLeftRadius = newRadius;
+                msg.values.forEach(value => {
+                    let currentValue = parseInt(value);
+                    difference = Math.abs(currentValue - currentRadius);
+                    if (difference < smallestDifference) {
+                        newRadius = currentValue;
+                        smallestDifference = Math.abs(newRadius - currentRadius);
+                    }
+                });
+                node.bottomLeftRadius = newRadius;
+            }
+            if ("bottomRightRadius" in node) {
+                let newRadius = parseInt(msg.values[0]);
+                let currentRadius = node.bottomRightRadius;
+                let difference;
+                let smallestDifference = Math.abs(newRadius - currentRadius);
+                node.bottomRightRadius = newRadius;
+                msg.values.forEach(value => {
+                    let currentValue = parseInt(value);
+                    difference = Math.abs(currentValue - currentRadius);
+                    if (difference < smallestDifference) {
+                        newRadius = currentValue;
+                        smallestDifference = Math.abs(newRadius - currentRadius);
+                    }
+                });
+                node.bottomRightRadius = newRadius;
+            }
         });
     }
 };
