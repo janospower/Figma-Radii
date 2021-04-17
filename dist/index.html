@@ -2083,7 +2083,7 @@
           border: 0;
           height: 1px;
           background: var(--silver);
-          margin-top: 0px; }
+          margin: 0px; }
 
         .bottom {
           position: absolute;
@@ -2096,12 +2096,13 @@
     <body>
 
     <div class="tabs flex p-xxsmall">
-        <div id="tabSmoothing" class="section-title">Corner smoothing</div>
-        <div id="tabSnap" class="section-title inactive">Snap radius</div>
+        <!--  change to radio -->
+        <div id="smoothing" class="section-title">Corner smoothing</div>
+        <div id="snap" class="section-title inactive">Snap radius</div>
     </div>
-    <hr>
+    <hr class="mb-xxsmall">
 
-    <div id="smooth">
+    <div id="smoothing-container">
         <div class="p-xxsmall">
         
         
@@ -2150,8 +2151,35 @@
         </div>
     </div>
 
-    <div id="snap" class="hidden">
+    <div id="snap-container" class="hidden">
+        <!-- add plus icon button next to "Radius" text -->
 
+        <div class="p-xxsmall">
+        
+        
+            <div class="type mb-xxsmall">The corner radius of each element will be changed to match the closest number from this list.</div>
+
+        </div>
+        <hr>
+        <div class="p-xxsmall">
+
+            <div class="section-title inactive">Radius</div>
+
+        </div>
+        <hr>
+        <div class="p-xxsmall">
+    
+    
+        </div>
+
+        <div class="p-xxsmall bottom">
+            <button id="snapApply" class='button button--primary button--full' disabled>Apply</button>  
+    
+            <div class="switch">
+                <input class="switch__toggle" type="checkbox" id="snapApplyToSelection">
+                <label class="switch__label" for="snapApplyToSelection">Only current selection</label>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -2627,10 +2655,29 @@
     function helper() {
         console.log('testing');
     }
-    //vars
-    const tabSmooth = document.querySelector('#tabSmooth');
-    const tabSelect = document.querySelector('#tabSelect');
+    // Global
+    const tabs = document.querySelectorAll('.tabs .section-title');
+    const Smoothing = document.querySelector('#smoothing');
+    const Snap = document.querySelector('#snap');
 
+    tabs.forEach(tab => {
+        tab.addEventListener('mousedown', e => {
+            activateTab(tab);
+        });
+    });
+
+    function activateTab(tab) {
+        tabs.forEach(element => {
+            element.classList.add('inactive');
+            document.querySelector(`#${element.id}-container`).classList.add('hidden');
+        });
+        tab.classList.remove('inactive');
+        document.querySelector(`#${tab.id}-container`).classList.remove('hidden');
+    }
+
+    // smoothing
+
+    //vars
     const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
     const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
     const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
@@ -2662,6 +2709,10 @@
             case 'selectionChange':
                 event.data.pluginMessage.value ? selection = true : selection = false;
                 checkApply();
+                break;
+
+            case 'modeChange':
+                activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
                 break;
         
             default:

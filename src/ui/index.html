@@ -12,12 +12,12 @@
 
     <div class="tabs flex p-xxsmall">
         <!--  change to radio -->
-        <div id="tabSmoothing" class="section-title">Corner smoothing</div>
-        <div id="tabSnap" class="section-title inactive">Snap radius</div>
+        <div id="smoothing" class="section-title">Corner smoothing</div>
+        <div id="snap" class="section-title inactive">Snap radius</div>
     </div>
-    <hr>
+    <hr class="mb-xxsmall">
 
-    <div id="smooth">
+    <div id="smoothing-container">
         <div class="p-xxsmall">
         
         
@@ -66,8 +66,35 @@
         </div>
     </div>
 
-    <div id="snap" class="hidden">
+    <div id="snap-container" class="hidden">
         <!-- add plus icon button next to "Radius" text -->
+
+        <div class="p-xxsmall">
+        
+        
+            <div class="type mb-xxsmall">The corner radius of each element will be changed to match the closest number from this list.</div>
+
+        </div>
+        <hr>
+        <div class="p-xxsmall">
+
+            <div class="section-title inactive">Radius</div>
+
+        </div>
+        <hr>
+        <div class="p-xxsmall">
+    
+    
+        </div>
+
+        <div class="p-xxsmall bottom">
+            <button id="snapApply" class='button button--primary button--full' disabled>Apply</button>  
+    
+            <div class="switch">
+                <input class="switch__toggle" type="checkbox" id="snapApplyToSelection">
+                <label class="switch__label" for="snapApplyToSelection">Only current selection</label>
+            </div>
+        </div>
     </div>
     
     <script src="./tmp/scripts.js"></script>

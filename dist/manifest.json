@@ -5,7 +5,7 @@
   "main": "code.js",
   "ui": "index.html",
   "menu": [
-    {"name": "Smooth corners", "command": "smooth"},
+    {"name": "Smooth corners", "command": "smoothing"},
     {"name": "Snap radius", "command": "snap"}
   ]
 }

@@ -18,4 +18,7 @@ figma.ui.onmessage = msg => {
         });
     }
 };
-console.log(figma.command);
+figma.ui.postMessage({
+    type: 'modeChange',
+    value: figma.command
+});

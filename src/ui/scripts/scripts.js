@@ -1,7 +1,26 @@
-//vars
-const tabSmooth = document.querySelector('#tabSmooth');
-const tabSelect = document.querySelector('#tabSelect');
+// Global
+const tabs = document.querySelectorAll('.tabs .section-title');
+const Smoothing = document.querySelector('#smoothing');
+const Snap = document.querySelector('#snap');
 
+tabs.forEach(tab => {
+    tab.addEventListener('mousedown', e => {
+        activateTab(tab);
+    });
+});
+
+function activateTab(tab) {
+    tabs.forEach(element => {
+        element.classList.add('inactive');
+        document.querySelector(`#${element.id}-container`).classList.add('hidden');
+    });
+    tab.classList.remove('inactive');
+    document.querySelector(`#${tab.id}-container`).classList.remove('hidden');
+}
+
+// smoothing
+
+//vars
 const smoothingSelectValue = document.querySelector('#smoothingSelectValue');
 const smoothingSelectValueContainer = document.querySelector('#smoothingSelectValueContainer');
 const smoothingCustomValue = document.querySelector('#smoothingCustomValue');
@@ -33,6 +52,10 @@ onmessage = (event) => {
         case 'selectionChange':
             event.data.pluginMessage.value ? selection = true : selection = false;
             checkApply();
+            break;
+
+        case 'modeChange':
+            activateTab( document.querySelector( `#${event.data.pluginMessage.value}` ) );
             break;
     
         default:
