@@ -1,4 +1,4 @@
-figma.showUI(__uiFiles__.smooth, {width: 300, height: 500 });
+figma.showUI(__html__, {width: 300, height: 500 });
 
 figma.on("selectionchange", () => { 
 		figma.ui.postMessage({

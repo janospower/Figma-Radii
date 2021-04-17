@@ -3,10 +3,7 @@
   "id": "",
   "api": "1.0.0",
   "main": "code.js",
-  "ui": {
-    "smooth": "smooth.html",
-    "snap": "snap.html"
-  },
+  "ui": "index.html",
   "menu": [
     {"name": "Smooth corners", "command": "smooth"},
     {"name": "Snap radius", "command": "snap"}
