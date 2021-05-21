@@ -20,7 +20,9 @@ figma.on("selectionchange", () => {
 })
 
 figma.ui.onmessage = msg => {
+	
 	if (msg.type === 'smooth') {
+		
 		let nodes = figma.currentPage.selection;
 		if (!msg.selection) {
 			nodes = figma.currentPage.findAll(n => n.type === "RECTANGLE" || n.type === "FRAME" || n.type === "COMPONENT")
@@ -31,10 +33,7 @@ figma.ui.onmessage = msg => {
 			}
 		});
 	}
-};
 
-
-figma.ui.onmessage = msg => {
 	if (msg.type === 'snap-change') {
 		state = msg.values;
 	}

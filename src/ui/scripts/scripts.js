@@ -210,7 +210,7 @@ function sendSmoothing() {
     if (value === '') {
         value = 0;
     }
-
+    
     parent.postMessage({ pluginMessage: { 
         'type': 'smooth', 
         'selection': smoothingApplyToSelection.checked,
